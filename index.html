@@ -29,7 +29,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 .seedtag{position:absolute;top:4px;left:10px;z-index:4;font-size:11px;font-weight:900;letter-spacing:.9px;color:#6b7580;text-transform:uppercase}
 .player{height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 11px 5px 15px}
 .player+.player{border-top:1px solid #dde2e7;padding-top:6px}
-.name{font-size:17px;font-weight:900;line-height:1.1;min-width:0}
+.name{font-size:15px;font-weight:900;line-height:1.1;min-width:0}
 .rank{flex:0 0 auto;font-size:12px;color:#59636d;background:#eef1f4;border-radius:12px;padding:3px 7px;white-space:nowrap}
 .candidate.upper:before,.candidate.lower:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24}
 .candidate.upper:before{background:linear-gradient(90deg,var(--upper),transparent 43%)}
@@ -88,7 +88,7 @@ body.edit-mode .watermark-layer{display:block}
 <div class="canvas" id="bracket">
 <div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
-<div class="subtitle" contenteditable="true">更新时间：2026/8/18 22:33</div>
+<div class="subtitle" contenteditable="true">更新时间：2026/8/18 22:44</div>
 <div class="layer" style="left:130px">参赛队伍</div>
 <div class="layer" style="left:380px">四分之一决赛</div>
 <div class="layer" style="left:630px">半决赛</div>
@@ -98,19 +98,19 @@ body.edit-mode .watermark-layer{display:block}
 <div class="layer" style="left:1670px">参赛队伍</div>
 <svg aria-hidden="true" class="paths" height="880" viewBox="0 0 1800 880" width="1800">
 <!-- left candidates -> quarterfinals -->
-<path d="M240 191 H255 V324 M240 324 H255 M255 258 H270"></path>
-<path d="M240 606 H255 V739 M240 739 H255 M255 673 H270"></path>
+<path d="M240 191 H255 V337 M240 337 H255 M255 264 H270"></path>
+<path d="M240 606 H255 V752 M240 752 H255 M255 679 H270"></path>
 <!-- left quarterfinals -> semifinal -->
-<path d="M490 258 H505 V673 M490 673 H505 M505 465 H520"></path>
+<path d="M490 264 H505 V679 M490 679 H505 M505 465 H520"></path>
 <!-- left semifinal -> final -->
 <path d="M740 465 H770"></path>
 <!-- right final -> semifinal -->
 <path d="M1030 465 H1060"></path>
 <!-- right semifinal -> quarterfinals -->
-<path d="M1280 465 H1295 V258 M1295 673 V465 M1295 258 H1310 M1295 673 H1310"></path>
+<path d="M1280 465 H1295 V264 M1295 679 V465 M1295 264 H1310 M1295 679 H1310"></path>
 <!-- right quarterfinals -> candidates -->
-<path d="M1530 258 H1545 V191 M1545 324 V258 M1545 191 H1560 M1545 324 H1560"></path>
-<path d="M1530 673 H1545 V606 M1545 739 V673 M1545 606 H1560 M1545 739 H1560"></path>
+<path d="M1530 264 H1545 V191 M1545 337 V264 M1545 191 H1560 M1545 337 H1560"></path>
+<path d="M1530 679 H1545 V606 M1545 752 V679 M1545 606 H1560 M1545 752 H1560"></path>
 </svg>
 <!-- LEFT CANDIDATES: QF 1 -->
 <div class="card candidate upper" style="left:20px;top:131px">
@@ -118,7 +118,7 @@ body.edit-mode .watermark-layer{display:block}
 <div class="player"><span class="name" contenteditable="true">流年似梦</span><span class="rank" contenteditable="true">9段 [业6]</span></div>
 <div class="player"><span class="name" contenteditable="true">Afrive</span><span class="rank" contenteditable="true">7段</span></div>
 </div>
-<div class="card candidate lower" style="left:20px;top:264px">
+<div class="card candidate lower" style="left:20px;top:277px">
 <div class="seedtag">低种子 1 · D+B</div>
 <div class="player"><span class="name" contenteditable="true">黑白入玄</span><span class="rank" contenteditable="true">9段</span></div>
 <div class="player"><span class="name" contenteditable="true">网友小熊</span><span class="rank" contenteditable="true">6段</span></div>
@@ -129,17 +129,17 @@ body.edit-mode .watermark-layer{display:block}
 <div class="player"><span class="name" contenteditable="true">唐英w</span><span class="rank" contenteditable="true">9段 [业6]</span></div>
 <div class="player"><span class="name" contenteditable="true">烨千月</span><span class="rank" contenteditable="true">3段</span></div>
 </div>
-<div class="card candidate lower" style="left:20px;top:679px">
+<div class="card candidate lower" style="left:20px;top:692px">
 <div class="seedtag">低种子 3 · E+B</div>
 <div class="player"><span class="name" contenteditable="true">La Campanella</span><span class="rank" contenteditable="true">9段</span></div>
 <div class="player"><span class="name" contenteditable="true">小虎96543</span><span class="rank" contenteditable="true">5段</span></div>
 </div>
 <!-- LEFT QF -->
-<div class="card match" data-next-match="sf1" data-next-slot="0" id="qf1" style="left:270px;top:202px">
+<div class="card match" data-next-match="sf1" data-next-slot="0" id="qf1" style="left:270px;top:208px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">流年似梦 + Afrive</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">黑白入玄 + 网友小熊</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="card match" data-next-match="sf1" data-next-slot="1" id="qf2" style="left:270px;top:617px">
+<div class="card match" data-next-match="sf1" data-next-slot="1" id="qf2" style="left:270px;top:623px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">唐英w + 烨千月</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">La Campanella + 小虎96543</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
@@ -159,11 +159,11 @@ body.edit-mode .watermark-layer{display:block}
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
 <!-- RIGHT QF -->
-<div class="card match" data-next-match="sf2" data-next-slot="0" id="qf3" style="left:1310px;top:202px">
+<div class="card match" data-next-match="sf2" data-next-slot="0" id="qf3" style="left:1310px;top:208px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">水北天南 + Yuyuko0x0</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">HLE2137 + 今夕只为何夕</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="card match" data-next-match="sf2" data-next-slot="1" id="qf4" style="left:1310px;top:617px">
+<div class="card match" data-next-match="sf2" data-next-slot="1" id="qf4" style="left:1310px;top:623px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">酒寄辉夜 + 鸽子诗人</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">芦苇n + 青火kdy</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
@@ -173,7 +173,7 @@ body.edit-mode .watermark-layer{display:block}
 <div class="player"><span class="name" contenteditable="true">水北天南</span><span class="rank" contenteditable="true">9段 [业6]</span></div>
 <div class="player"><span class="name" contenteditable="true">Yuyuko0x0</span><span class="rank" contenteditable="true">7段</span></div>
 </div>
-<div class="card candidate right upper" style="left:1560px;top:264px">
+<div class="card candidate right upper" style="left:1560px;top:277px">
 <div class="seedtag">D组 · 高种子</div>
 <div class="player"><span class="name" contenteditable="true">HLE2137</span><span class="rank" contenteditable="true">8段</span></div>
 <div class="player"><span class="name" contenteditable="true">今夕只为何夕</span><span class="rank" contenteditable="true">5段</span></div>
@@ -184,7 +184,7 @@ body.edit-mode .watermark-layer{display:block}
 <div class="player"><span class="name" contenteditable="true">酒寄辉夜</span><span class="rank" contenteditable="true">9段</span></div>
 <div class="player"><span class="name" contenteditable="true">鸽子诗人</span><span class="rank" contenteditable="true">6段</span></div>
 </div>
-<div class="card candidate right lower" style="left:1560px;top:679px">
+<div class="card candidate right lower" style="left:1560px;top:692px">
 <div class="seedtag">低种子 2 · C+A</div>
 <div class="player"><span class="name" contenteditable="true">芦苇n</span><span class="rank" contenteditable="true">9段 [业6]</span></div>
 <div class="player"><span class="name" contenteditable="true">青火kdy</span><span class="rank" contenteditable="true">7段</span></div>
