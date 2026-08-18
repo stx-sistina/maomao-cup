@@ -15,6 +15,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 .toolbar .hint{margin-left:auto;color:var(--muted);font-size:13px}
 .wrap{overflow-x:auto;padding:20px}
 .canvas{position:relative;width:1800px;height:880px;margin:0 auto;background:#fff;border:1px solid #d9dee4;border-radius:14px;box-shadow:0 12px 32px rgba(27,38,48,.08);overflow:hidden}
+.canvas::before{content:'';position:absolute;inset:0;background:url('bg.png') top left/1800px 880px no-repeat;opacity:.2;z-index:0}
 .title{position:absolute;top:25px;left:0;width:100%;text-align:center;font-size:31px;font-weight:900}
 .subtitle{position:absolute;top:65px;left:0;width:100%;text-align:center;color:var(--muted);font-size:15px}
 .layer{position:absolute;top:108px;transform:translateX(-50%);font-size:12px;font-weight:900;letter-spacing:1.35px;color:#79838e}
