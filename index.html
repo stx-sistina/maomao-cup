@@ -69,6 +69,16 @@ body:not(.edit-mode) .teamrow,body:not(.edit-mode) .stone,body:not(.edit-mode) .
 .watermark-layer{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;display:none}
 body.edit-mode .watermark-layer{display:block}
 .watermark-text{position:absolute;font-size:26px;font-weight:900;color:rgba(27,38,48,.07);white-space:nowrap;transform:rotate(-28deg);font-family:"Lato",Arial,sans-serif;letter-spacing:2px}
+.archive-link{position:absolute;z-index:5;text-align:center}
+.archive-link button{font:700 11px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:12px;background:#fff;padding:3px 12px;cursor:pointer;color:#4a5560}
+.archive-link button:hover{background:#eef1f4}
+.modal-overlay{position:fixed;inset:0;background:rgba(20,26,32,.55);z-index:100;display:flex;align-items:center;justify-content:center}
+.modal-box{position:relative;background:#fff;border-radius:12px;padding:26px 28px;width:420px;max-width:90vw;max-height:85vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-close{position:absolute;top:8px;right:12px;border:none;background:none;font-size:22px;line-height:1;cursor:pointer;color:#6f7882}
+.archive-field{margin-bottom:16px}
+.archive-label{font-size:12px;font-weight:900;color:#6f7882;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.archive-value{font-size:14px;line-height:1.5;white-space:pre-line}
+.archive-value a{color:#2f6fa8;text-decoration:none;border-bottom:1px solid currentColor}
 @media print{body{background:#fff}.toolbar{display:none}.wrap{padding:0;overflow:visible}.canvas{border:none;box-shadow:none}}
 </style>
 </head>
@@ -86,10 +96,9 @@ body.edit-mode .watermark-layer{display:block}
 </div>
 </div>
 <div class="wrap">
-<div class="canvas" id="bracket">
-<div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
+<div class="canvas" id="bracket"><div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
-<div class="subtitle" contenteditable="true">更新时间：2026/8/18 23:15</div>
+<div class="subtitle" contenteditable="true">更新时间：2026/8/19 00:03</div>
 <div class="layer" style="left:130px">参赛队伍</div>
 <div class="layer" style="left:380px">四分之一决赛</div>
 <div class="layer" style="left:630px">半决赛</div>
@@ -140,34 +149,41 @@ body.edit-mode .watermark-layer{display:block}
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">流年似梦 + Afrive</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">黑白入玄 + 网友小熊</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
+<div class="archive-link" style="left:270px;top:326px;width:220px"><button onclick="openArchive('qf1')" style="display:none">查看资料</button></div>
 <div class="card match" data-next-match="sf1" data-next-slot="1" id="qf2" style="left:270px;top:623px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">唐英w + 烨千月</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">La Campanella + 小虎96543</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
+<div class="archive-link" style="left:270px;top:741px;width:220px"><button onclick="openArchive('qf2')" style="display:none">查看资料</button></div>
 <!-- LEFT SF -->
 <div class="card match" data-next-match="final" data-next-slot="0" id="sf1" style="left:520px;top:409px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
+<div class="archive-link" style="left:520px;top:527px;width:220px"><button onclick="openArchive('sf1')" style="display:none">查看资料</button></div>
 <!-- FINAL -->
 <div class="card match final" id="final" style="left:770px;top:398px">
 <div class="teamrow" onclick="handleFinalClick(event,this)"><span class="teamtext">待定</span><span class="score"></span><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
 <div class="teamrow" onclick="handleFinalClick(event,this)"><span class="teamtext">待定</span><span class="score"></span><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
 </div>
+<div class="archive-link" style="left:770px;top:538px;width:260px"><button onclick="openArchive('final')" style="display:none">查看资料</button></div>
 <!-- RIGHT SF -->
 <div class="card match" data-next-match="final" data-next-slot="1" id="sf2" style="left:1060px;top:409px">
-<div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
+<div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">HLE2137 + 今夕只为何夕</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
+<div class="archive-link" style="left:1060px;top:527px;width:220px"><button onclick="openArchive('sf2')" style="display:none">查看资料</button></div>
 <!-- RIGHT QF -->
 <div class="card match" data-next-match="sf2" data-next-slot="0" id="qf3" style="left:1310px;top:208px">
-<div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">水北天南 + Yuyuko0x0</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
-<div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">HLE2137 + 今夕只为何夕</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
+<div class="teamrow loser" onclick="toggleMatchResult(event,this)"><span class="teamtext">水北天南 + Yuyuko0x0</span><span class="stone black" onclick="toggleStone(event,this)"></span></div>
+<div class="teamrow winner" onclick="toggleMatchResult(event,this)"><span class="teamtext">HLE2137 + 今夕只为何夕</span><span class="stone white" onclick="toggleStone(event,this)"></span></div>
 </div>
+<div class="archive-link" style="left:1310px;top:326px;width:220px"><button onclick="openArchive('qf3')" style="display:none">查看资料</button></div>
 <div class="card match" data-next-match="sf2" data-next-slot="1" id="qf4" style="left:1310px;top:623px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">酒寄辉夜 + 鸽子诗人</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">芦苇n + 青火kdy</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
+<div class="archive-link" style="left:1310px;top:741px;width:220px"><button onclick="openArchive('qf4')" style="display:none">查看资料</button></div>
 <!-- RIGHT CANDIDATES: QF 3 -->
 <div class="card candidate right upper" style="left:1560px;top:131px">
 <div class="seedtag">B组 · 高种子</div>
@@ -200,6 +216,16 @@ body.edit-mode .watermark-layer{display:block}
 </div>
 <div class="note" contenteditable="true"><div><span style="color: rgb(111, 120, 130); font-size: 15px; text-align: center;">比赛用时为每方40分钟+3次40秒读秒</span></div><span style="color: rgb(111, 120, 130); font-size: 15px; text-align: center;">最终解释权归猫猫所有</span></div>
 </div>
+</div>
+</div>
+<div class="modal-overlay" id="archiveOverlay" style="display:none" onclick="if(event.target===this) closeArchive()">
+<div class="modal-box">
+<button class="modal-close" onclick="closeArchive()">&times;</button>
+<div class="archive-field" id="archiveField-black"><div class="archive-label">黑方</div><div class="archive-value" id="archiveValue-black"></div></div>
+<div class="archive-field" id="archiveField-white"><div class="archive-label">白方</div><div class="archive-value" id="archiveValue-white"></div></div>
+<div class="archive-field" id="archiveField-result"><div class="archive-label">对局结果</div><div class="archive-value" id="archiveValue-result"></div></div>
+<div class="archive-field" id="archiveField-link"><div class="archive-label">比赛链接</div><div class="archive-value" id="archiveValue-link"></div></div>
+<div class="archive-field" id="archiveField-report"><div class="archive-label">复盘报告</div><div class="archive-value" id="archiveValue-report"></div></div>
 </div>
 </div>
 <script>
@@ -242,7 +268,62 @@ function buildWatermark() {
 document.addEventListener('DOMContentLoaded', () => {
   setEditableState(false);
   buildWatermark();
+  initArchiveButtons();
 });
+
+// --- Per-game archive (read-only viewer; data lives in each .match's data-archive attribute) ---
+function getArchive(matchId) {
+  const match = document.getElementById(matchId);
+  const empty = { black: '', white: '', result: '', link: '', reportName: '', reportPath: '' };
+  if (!match) return empty;
+  const raw = match.getAttribute('data-archive');
+  if (!raw) return empty;
+  try { return Object.assign(empty, JSON.parse(raw)); } catch (e) { return empty; }
+}
+
+function archiveHasContent(data) {
+  return !!(data && (data.black || data.white || data.result || data.link || data.reportPath));
+}
+
+function initArchiveButtons() {
+  document.querySelectorAll('.archive-link button').forEach(btn => {
+    const matchId = (btn.getAttribute('onclick') || '').match(/openArchive\('([^']+)'\)/);
+    if (!matchId) return;
+    const data = getArchive(matchId[1]);
+    btn.style.display = archiveHasContent(data) ? 'inline-block' : 'none';
+  });
+}
+
+function setArchiveRow(fieldKey, html) {
+  const field = document.getElementById('archiveField-' + fieldKey);
+  const value = document.getElementById('archiveValue-' + fieldKey);
+  if (!field || !value) return;
+  if (html) {
+    value.innerHTML = html;
+    field.style.display = '';
+  } else {
+    field.style.display = 'none';
+  }
+}
+
+function openArchive(matchId) {
+  const data = getArchive(matchId);
+  setArchiveRow('black', data.black ? escapeHtml(data.black) : '');
+  setArchiveRow('white', data.white ? escapeHtml(data.white) : '');
+  setArchiveRow('result', data.result ? escapeHtml(data.result) : '');
+  setArchiveRow('link', data.link ? '<a href="' + escapeAttr(data.link) + '" target="_blank" rel="noopener">' + escapeHtml(data.link) + '</a>' : '');
+  setArchiveRow('report', data.reportPath ? '<a href="' + escapeAttr(data.reportPath) + '" download>下载：' + escapeHtml(data.reportName || data.reportPath) + '</a>' : '');
+  document.getElementById('archiveOverlay').style.display = 'flex';
+}
+
+function closeArchive() {
+  document.getElementById('archiveOverlay').style.display = 'none';
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
 
 function toggleStone(e, el) {
   if (!editMode) return;
