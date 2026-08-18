@@ -79,6 +79,10 @@ body.edit-mode .watermark-layer{display:block}
 .archive-label{font-size:12px;font-weight:900;color:#6f7882;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
 .archive-value{font-size:14px;line-height:1.5;white-space:pre-line}
 .archive-value a{color:#2f6fa8;text-decoration:none;border-bottom:1px solid currentColor}
+.archive-tabs{display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid #d9dee4;margin-bottom:18px}
+.archive-tabs button{font:700 11px "Lato",Arial,sans-serif;text-transform:uppercase;letter-spacing:.6px;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;padding:0 0 9px;cursor:pointer;color:#8a939c}
+.archive-tabs button:hover{color:#4a5560}
+.archive-tabs button.active{color:var(--ink);font-weight:900;border-bottom-color:#6f9f7b}
 @media print{body{background:#fff}.toolbar{display:none}.wrap{padding:0;overflow:visible}.canvas{border:none;box-shadow:none}}
 </style>
 </head>
@@ -98,7 +102,7 @@ body.edit-mode .watermark-layer{display:block}
 <div class="wrap">
 <div class="canvas" id="bracket"><div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
-<div class="subtitle" contenteditable="true">更新时间：2026/8/19 00:03</div>
+<div class="subtitle" contenteditable="true">更新时间：2026/8/19 01:28</div>
 <div class="layer" style="left:130px">参赛队伍</div>
 <div class="layer" style="left:380px">四分之一决赛</div>
 <div class="layer" style="left:630px">半决赛</div>
@@ -149,41 +153,41 @@ body.edit-mode .watermark-layer{display:block}
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">流年似梦 + Afrive</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">黑白入玄 + 网友小熊</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="archive-link" style="left:270px;top:326px;width:220px"><button onclick="openArchive('qf1')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:270px;top:326px;width:220px"><button onclick="openArchive('qf1')" style="display: none;">对局档案</button></div>
 <div class="card match" data-next-match="sf1" data-next-slot="1" id="qf2" style="left:270px;top:623px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">唐英w + 烨千月</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">La Campanella + 小虎96543</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="archive-link" style="left:270px;top:741px;width:220px"><button onclick="openArchive('qf2')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:270px;top:741px;width:220px"><button onclick="openArchive('qf2')" style="display: none;">对局档案</button></div>
 <!-- LEFT SF -->
 <div class="card match" data-next-match="final" data-next-slot="0" id="sf1" style="left:520px;top:409px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="archive-link" style="left:520px;top:527px;width:220px"><button onclick="openArchive('sf1')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:520px;top:527px;width:220px"><button onclick="openArchive('sf1')" style="display: none;">对局档案</button></div>
 <!-- FINAL -->
 <div class="card match final" id="final" style="left:770px;top:398px">
 <div class="teamrow" onclick="handleFinalClick(event,this)"><span class="teamtext">待定</span><span class="score"></span><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
 <div class="teamrow" onclick="handleFinalClick(event,this)"><span class="teamtext">待定</span><span class="score"></span><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
 </div>
-<div class="archive-link" style="left:770px;top:538px;width:260px"><button onclick="openArchive('final')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:770px;top:538px;width:260px"><button onclick="openArchive('final')" style="display: none;">对局档案</button></div>
 <!-- RIGHT SF -->
 <div class="card match" data-next-match="final" data-next-slot="1" id="sf2" style="left:1060px;top:409px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">HLE2137 + 今夕只为何夕</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="archive-link" style="left:1060px;top:527px;width:220px"><button onclick="openArchive('sf2')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:1060px;top:527px;width:220px"><button onclick="openArchive('sf2')" style="display: none;">对局档案</button></div>
 <!-- RIGHT QF -->
-<div class="card match" data-next-match="sf2" data-next-slot="0" id="qf3" style="left:1310px;top:208px">
+<div class="card match" data-next-match="sf2" data-next-slot="0" id="qf3" style="left:1310px;top:208px" data-archive="[{&quot;black&quot;:&quot;水北天南 [9段, 业6]\nYuyuko0x0 [7段]&quot;,&quot;white&quot;:&quot;HLE2137 [8段]\n今夕只为何夕 [5段]&quot;,&quot;result&quot;:&quot;白胜1/4子&quot;,&quot;link&quot;:&quot;https://online-go.com/game/89860378&quot;,&quot;sgfName&quot;:&quot;qf3.sgf&quot;,&quot;sgfPath&quot;:&quot;archive/sgf/qf3.sgf&quot;,&quot;reportName&quot;:&quot;qf3.pdf&quot;,&quot;reportPath&quot;:&quot;archive/report/qf3.pdf&quot;}]">
 <div class="teamrow loser" onclick="toggleMatchResult(event,this)"><span class="teamtext">水北天南 + Yuyuko0x0</span><span class="stone black" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow winner" onclick="toggleMatchResult(event,this)"><span class="teamtext">HLE2137 + 今夕只为何夕</span><span class="stone white" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="archive-link" style="left:1310px;top:326px;width:220px"><button onclick="openArchive('qf3')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:1310px;top:326px;width:220px"><button onclick="openArchive('qf3')" class="" style="display: inline-block;">对局档案</button></div>
 <div class="card match" data-next-match="sf2" data-next-slot="1" id="qf4" style="left:1310px;top:623px">
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">酒寄辉夜 + 鸽子诗人</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 <div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">芦苇n + 青火kdy</span><span class="stone" onclick="toggleStone(event,this)"></span></div>
 </div>
-<div class="archive-link" style="left:1310px;top:741px;width:220px"><button onclick="openArchive('qf4')" style="display:none">查看资料</button></div>
+<div class="archive-link" style="left:1310px;top:741px;width:220px"><button onclick="openArchive('qf4')" style="display: none;">对局档案</button></div>
 <!-- RIGHT CANDIDATES: QF 3 -->
 <div class="card candidate right upper" style="left:1560px;top:131px">
 <div class="seedtag">B组 · 高种子</div>
@@ -220,11 +224,13 @@ body.edit-mode .watermark-layer{display:block}
 </div>
 <div class="modal-overlay" id="archiveOverlay" style="display:none" onclick="if(event.target===this) closeArchive()">
 <div class="modal-box">
-<button class="modal-close" onclick="closeArchive()">&times;</button>
+<button class="modal-close" onclick="closeArchive()">×</button>
+<div class="archive-tabs" id="archiveViewerTabs" style="display:none"></div>
 <div class="archive-field" id="archiveField-black"><div class="archive-label">黑方</div><div class="archive-value" id="archiveValue-black"></div></div>
 <div class="archive-field" id="archiveField-white"><div class="archive-label">白方</div><div class="archive-value" id="archiveValue-white"></div></div>
 <div class="archive-field" id="archiveField-result"><div class="archive-label">对局结果</div><div class="archive-value" id="archiveValue-result"></div></div>
 <div class="archive-field" id="archiveField-link"><div class="archive-label">比赛链接</div><div class="archive-value" id="archiveValue-link"></div></div>
+<div class="archive-field" id="archiveField-sgf"><div class="archive-label">棋谱</div><div class="archive-value" id="archiveValue-sgf"></div></div>
 <div class="archive-field" id="archiveField-report"><div class="archive-label">复盘报告</div><div class="archive-value" id="archiveValue-report"></div></div>
 </div>
 </div>
@@ -272,25 +278,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Per-game archive (read-only viewer; data lives in each .match's data-archive attribute) ---
-function getArchive(matchId) {
-  const match = document.getElementById(matchId);
-  const empty = { black: '', white: '', result: '', link: '', reportName: '', reportPath: '' };
-  if (!match) return empty;
-  const raw = match.getAttribute('data-archive');
-  if (!raw) return empty;
-  try { return Object.assign(empty, JSON.parse(raw)); } catch (e) { return empty; }
+// Most matches are best-of-1 and store a single archive entry. The final is best-of-3, so
+// it stores an array of up to 3 entries (one per game) and the viewer shows tabs for the
+// rounds that actually have content.
+const ARCHIVE_SLOT_COUNTS = { final: 3 };
+
+function getArchiveSlotCount(matchId) {
+  return ARCHIVE_SLOT_COUNTS[matchId] || 1;
 }
 
-function archiveHasContent(data) {
-  return !!(data && (data.black || data.white || data.result || data.link || data.reportPath));
+function emptyArchiveEntry() {
+  return { black: '', white: '', result: '', link: '', sgfName: '', sgfPath: '', reportName: '', reportPath: '' };
+}
+
+function getArchiveList(matchId) {
+  const slots = getArchiveSlotCount(matchId);
+  const list = Array.from({ length: slots }, emptyArchiveEntry);
+  const match = document.getElementById(matchId);
+  if (!match) return list;
+  const raw = match.getAttribute('data-archive');
+  if (!raw) return list;
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch (e) { return list; }
+  // Legacy data (pre-multi-round) stored a single plain object instead of an array.
+  const parsedList = Array.isArray(parsed) ? parsed : [parsed];
+  parsedList.forEach((entry, i) => { if (i < list.length) list[i] = Object.assign(emptyArchiveEntry(), entry); });
+  return list;
+}
+
+function archiveEntryHasContent(entry) {
+  return !!(entry && (entry.black || entry.white || entry.result || entry.link || entry.sgfPath || entry.reportPath));
+}
+
+function archiveListHasContent(list) {
+  return list.some(archiveEntryHasContent);
 }
 
 function initArchiveButtons() {
   document.querySelectorAll('.archive-link button').forEach(btn => {
     const matchId = (btn.getAttribute('onclick') || '').match(/openArchive\('([^']+)'\)/);
     if (!matchId) return;
-    const data = getArchive(matchId[1]);
-    btn.style.display = archiveHasContent(data) ? 'inline-block' : 'none';
+    btn.style.display = archiveListHasContent(getArchiveList(matchId[1])) ? 'inline-block' : 'none';
   });
 }
 
@@ -306,13 +334,53 @@ function setArchiveRow(fieldKey, html) {
   }
 }
 
-function openArchive(matchId) {
-  const data = getArchive(matchId);
+let archiveViewerMatchId = null;
+let archiveViewerRounds = []; // indices (into the full slot list) that have content
+
+function renderArchiveViewerTabs() {
+  const tabBar = document.getElementById('archiveViewerTabs');
+  tabBar.innerHTML = '';
+  if (archiveViewerRounds.length < 2) { tabBar.style.display = 'none'; return; }
+  tabBar.style.display = 'flex';
+  archiveViewerRounds.forEach(roundIdx => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = '第' + (roundIdx + 1) + '轮';
+    btn.addEventListener('click', () => showArchiveRound(roundIdx));
+    tabBar.appendChild(btn);
+  });
+  updateArchiveViewerTabActive(archiveViewerRounds[0]);
+}
+
+function updateArchiveViewerTabActive(activeRoundIdx) {
+  Array.from(document.getElementById('archiveViewerTabs').children).forEach((btn, i) => {
+    btn.classList.toggle('active', archiveViewerRounds[i] === activeRoundIdx);
+  });
+}
+
+function showArchiveRound(roundIdx) {
+  const list = getArchiveList(archiveViewerMatchId);
+  const data = list[roundIdx] || emptyArchiveEntry();
   setArchiveRow('black', data.black ? escapeHtml(data.black) : '');
   setArchiveRow('white', data.white ? escapeHtml(data.white) : '');
   setArchiveRow('result', data.result ? escapeHtml(data.result) : '');
   setArchiveRow('link', data.link ? '<a href="' + escapeAttr(data.link) + '" target="_blank" rel="noopener">' + escapeHtml(data.link) + '</a>' : '');
-  setArchiveRow('report', data.reportPath ? '<a href="' + escapeAttr(data.reportPath) + '" download>下载：' + escapeHtml(data.reportName || data.reportPath) + '</a>' : '');
+  // href is always our own repo-relative "archive/sgf/..." or "archive/report/..." path
+  // (see admin.html's registerManual*/upload handlers); browsers never expose the
+  // uploader's local file-system path via <input type=file>, so this can never leak a
+  // personal directory like /Users/....
+  setArchiveRow('sgf', data.sgfPath ? '<a href="' + escapeAttr(data.sgfPath) + '" download>下载棋谱</a>' : '');
+  setArchiveRow('report', data.reportPath ? '<a href="' + escapeAttr(data.reportPath) + '" download>下载报告</a>' : '');
+  updateArchiveViewerTabActive(roundIdx);
+}
+
+function openArchive(matchId) {
+  archiveViewerMatchId = matchId;
+  const list = getArchiveList(matchId);
+  archiveViewerRounds = list.map((entry, i) => archiveEntryHasContent(entry) ? i : -1).filter(i => i >= 0);
+  if (archiveViewerRounds.length === 0) return; // the button should already be hidden in this case
+  renderArchiveViewerTabs();
+  showArchiveRound(archiveViewerRounds[0]);
   document.getElementById('archiveOverlay').style.display = 'flex';
 }
 

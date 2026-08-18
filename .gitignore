@@ -1,1 +1,10 @@
 admin.html
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+
+# Stray local tooling (e.g. ad-hoc jsdom test scripts)
+node_modules/
+package.json
+package-lock.json
