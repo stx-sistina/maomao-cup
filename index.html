@@ -44,6 +44,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 .teamrow.winner{background:var(--win);box-shadow:inset 4px 0 0 var(--win-line)}
 .final .teamrow.winner{background:var(--gold-bg);box-shadow:inset 5px 0 0 var(--gold);color:var(--ink);opacity:1}
 .final .teamrow.loser{background:var(--silver-bg);box-shadow:inset 5px 0 0 var(--silver);color:#7e8790;opacity:.62}
+.final .teamrow.leading{background:var(--win);box-shadow:inset 5px 0 0 var(--win-line);color:var(--ink);opacity:1}
 .teamrow.winner .teamtext{font-weight:900}
 .teamrow.loser{background:#f3f4f5;color:#7e8790;opacity:.62}
 .teamtext{font-size:14px;font-weight:700;line-height:1.15;min-width:0}
@@ -77,10 +78,10 @@ body.edit-mode .watermark-layer{display:block}
 <button onclick="enterEditMode()">编辑模式</button>
 </div>
 <div class="toolbar-edit">
+<button onclick="exitEditMode()">回到官方结果</button>
 <button onclick="window.print()">打印 / 导出 PDF</button>
 <button onclick="downloadEdited()">保存编辑后的 HTML</button>
 <button onclick="clearResults()">清空赛果</button>
-<button onclick="exitEditMode()">回到官方结果</button>
 <span class="hint">可直接编辑选手名与段位 · 点击队伍设置/取消胜者，点击对手可反转 · 晋级队伍自动填入下一轮 · 棋色联动切换：未定 → 黑/白 → 白/黑</span>
 </div>
 </div>
@@ -88,7 +89,7 @@ body.edit-mode .watermark-layer{display:block}
 <div class="canvas" id="bracket">
 <div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
-<div class="subtitle" contenteditable="true">更新时间：2026/8/18 22:44</div>
+<div class="subtitle" contenteditable="true">更新时间：2026/8/18 23:01</div>
 <div class="layer" style="left:130px">参赛队伍</div>
 <div class="layer" style="left:380px">四分之一决赛</div>
 <div class="layer" style="left:630px">半决赛</div>
@@ -150,8 +151,8 @@ body.edit-mode .watermark-layer{display:block}
 </div>
 <!-- FINAL -->
 <div class="card match final" id="final" style="left:770px;top:398px">
-<div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><input class="score" onclick="event.stopPropagation()" value=""><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
-<div class="teamrow" onclick="toggleMatchResult(event,this)"><span class="teamtext">待定</span><input class="score" onclick="event.stopPropagation()" value=""><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
+<div class="teamrow" onclick="handleFinalClick(event,this)"><span class="teamtext">待定</span><span class="score"></span><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
+<div class="teamrow" onclick="handleFinalClick(event,this)"><span class="teamtext">待定</span><span class="score"></span><span class="finalstones"><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span><span class="stone" onclick="toggleStone(event,this)"></span></span></div>
 </div>
 <!-- RIGHT SF -->
 <div class="card match" data-next-match="final" data-next-slot="1" id="sf2" style="left:1060px;top:409px">
@@ -209,7 +210,6 @@ function setEditableState(isEdit) {
   document.querySelectorAll(EDITABLE_SELECTOR).forEach(el => {
     el.contentEditable = isEdit ? 'true' : 'false';
   });
-  document.querySelectorAll('input.score').forEach(i => { i.readOnly = !isEdit; });
 }
 
 function enterEditMode() {
@@ -287,8 +287,60 @@ function getWinner(match) {
 }
 
 function clearMatchState(match, clearScores = true) {
-  getRows(match).forEach(r => r.classList.remove('winner', 'loser'));
-  if (clearScores) match.querySelectorAll('.score').forEach(s => s.value = '');
+  getRows(match).forEach(r => r.classList.remove('winner', 'loser', 'leading'));
+  if (clearScores) match.querySelectorAll('.score').forEach(s => s.textContent = '');
+}
+
+function readFinalScore(el) {
+  return el.textContent === '' ? null : Number(el.textContent);
+}
+
+function writeFinalScore(el, val) {
+  el.textContent = val === null ? '' : String(val);
+}
+
+function updateFinalRender(match) {
+  const rows = getRows(match);
+  rows.forEach(r => r.classList.remove('winner', 'loser', 'leading'));
+  const scores = rows.map(r => readFinalScore(r.querySelector('.score')));
+  const [a, b] = scores;
+  if (a === 2 || b === 2) {
+    const winnerIdx = a === 2 ? 0 : 1;
+    rows[winnerIdx].classList.add('winner');
+    rows[1 - winnerIdx].classList.add('loser');
+  } else if ((a === 1 && b === 0) || (b === 1 && a === 0)) {
+    rows[a === 1 ? 0 : 1].classList.add('leading');
+  }
+}
+
+function bumpFinalScore(match, clickedIdx) {
+  const rows = getRows(match);
+  const els = rows.map(r => r.querySelector('.score'));
+  let scores = els.map(readFinalScore);
+  const otherIdx = 1 - clickedIdx;
+
+  const mine = scores[clickedIdx] === null ? 0 : scores[clickedIdx];
+  scores[clickedIdx] = Math.min(2, mine + 1);
+  // A score update always resolves the opponent's empty box to 0.
+  if (scores[otherIdx] === null) scores[otherIdx] = 0;
+
+  // An impossible total (e.g. 2:2 reached via extra clicks) resets the box.
+  if (scores[0] + scores[1] > 3) scores = [null, null];
+
+  writeFinalScore(els[0], scores[0]);
+  writeFinalScore(els[1], scores[1]);
+  updateFinalRender(match);
+}
+
+function handleFinalClick(e, row) {
+  if (!editMode) return;
+  if (e.target.closest('.stone')) return;
+  const match = row.closest('.match');
+  if (!match) return;
+  const rows = getRows(match);
+  const idx = rows.indexOf(row);
+  if (idx === -1) return;
+  bumpFinalScore(match, idx);
 }
 
 function setDownstreamSlot(matchId, slot, teamName) {
@@ -318,7 +370,6 @@ function propagateFrom(match) {
 
   // Any changed feeder invalidates results already entered downstream.
   clearMatchState(next);
-  if (next.id === 'final') next.querySelectorAll('.score').forEach(s => s.value = '');
 
   const teamName = winner ? winner.querySelector('.teamtext').textContent.trim() : '待定';
   setDownstreamSlot(nextId, slot, teamName);
@@ -329,14 +380,13 @@ function propagateFrom(match) {
     setDownstreamSlot(afterId, Number(next.dataset.nextSlot), '待定');
     const after = document.getElementById(afterId);
     clearMatchState(after);
-    if (after.id === 'final') after.querySelectorAll('.score').forEach(s => s.value = '');
   }
 }
 
 function toggleMatchResult(e, row) {
   if (!editMode) return;
-  // Stones and BO3 score fields have their own controls.
-  if (e.target.closest('.stone, input')) return;
+  // Stones have their own control.
+  if (e.target.closest('.stone')) return;
   const match = row.closest('.match');
   if (!match) return;
   const rows = getRows(match);
@@ -360,7 +410,7 @@ function toggleMatchResult(e, row) {
 function clearResults() {
   document.querySelectorAll('.match').forEach(m => clearMatchState(m));
   document.querySelectorAll('.match .stone').forEach(s => s.classList.remove('black', 'white'));
-  document.querySelectorAll('.score').forEach(s => s.value = '');
+  document.querySelectorAll('.score').forEach(s => s.textContent = '');
   ['sf1','sf2','final'].forEach(id => {
     const m = document.getElementById(id);
     getRows(m).forEach(r => r.querySelector('.teamtext').textContent = '待定');
@@ -368,7 +418,6 @@ function clearResults() {
 }
 
 function downloadEdited() {
-  document.querySelectorAll('input').forEach(i => i.setAttribute('value', i.value));
   const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
   const blob = new Blob([html], {type:'text/html'});
   const a = document.createElement('a');
