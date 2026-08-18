@@ -59,18 +59,34 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 .legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .chip{display:inline-flex;align-items:center;gap:6px}.swatch{width:18px;height:12px;border:1px solid #aeb7c0;border-radius:3px}.swatch.upper{background:var(--upper)}.swatch.lower{background:var(--lower)}.swatch.win{background:var(--win);border-color:var(--win-line)}
 .note{margin-left:auto;max-width:760px;text-align:right;line-height:1.35}
+.toolbar-view,.toolbar-edit{display:flex;align-items:center;gap:9px;width:100%}
+.toolbar-edit{display:none}
+body.edit-mode .toolbar-view{display:none}
+body.edit-mode .toolbar-edit{display:flex}
+body.edit-mode .subtitle{display:none}
+body:not(.edit-mode) .teamrow,body:not(.edit-mode) .stone,body:not(.edit-mode) .score{cursor:default}
+.watermark-layer{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;display:none}
+body.edit-mode .watermark-layer{display:block}
+.watermark-text{position:absolute;font-size:26px;font-weight:900;color:rgba(27,38,48,.07);white-space:nowrap;transform:rotate(-28deg);font-family:"Lato",Arial,sans-serif;letter-spacing:2px}
 @media print{body{background:#fff}.toolbar{display:none}.wrap{padding:0;overflow:visible}.canvas{border:none;box-shadow:none}}
 </style>
 </head>
 <body>
 <div class="toolbar">
+<div class="toolbar-view">
+<button onclick="enterEditMode()">编辑模式</button>
+</div>
+<div class="toolbar-edit">
 <button onclick="window.print()">打印 / 导出 PDF</button>
 <button onclick="downloadEdited()">保存编辑后的 HTML</button>
 <button onclick="clearResults()">清空赛果</button>
+<button onclick="exitEditMode()">回到官方结果</button>
 <span class="hint">可直接编辑选手名与段位 · 点击队伍设置/取消胜者，点击对手可反转 · 晋级队伍自动填入下一轮 · 棋色联动切换：未定 → 黑/白 → 白/黑</span>
+</div>
 </div>
 <div class="wrap">
 <div class="canvas" id="bracket">
+<div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
 <div class="subtitle" contenteditable="true">更新时间：2026/8/18 02:47</div>
 <div class="layer" style="left:130px">参赛队伍</div>
@@ -186,7 +202,50 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 </div>
 </div>
 <script>
+let editMode = false;
+const EDITABLE_SELECTOR = '.title, .subtitle, .name, .rank, .note';
+
+function setEditableState(isEdit) {
+  document.querySelectorAll(EDITABLE_SELECTOR).forEach(el => {
+    el.contentEditable = isEdit ? 'true' : 'false';
+  });
+  document.querySelectorAll('input.score').forEach(i => { i.readOnly = !isEdit; });
+}
+
+function enterEditMode() {
+  editMode = true;
+  document.body.classList.add('edit-mode');
+  setEditableState(true);
+}
+
+function exitEditMode() {
+  // Discard any in-page edits and return to the official read-only view.
+  location.reload();
+}
+
+function buildWatermark() {
+  const layer = document.getElementById('watermarkLayer');
+  if (!layer) return;
+  const spacingX = 260, spacingY = 200;
+  for (let y = -100; y < 1140; y += spacingY) {
+    for (let x = -140; x < 1900; x += spacingX) {
+      const span = document.createElement('span');
+      span.className = 'watermark-text';
+      span.textContent = '编辑模式';
+      span.style.left = x + 'px';
+      span.style.top = y + 'px';
+      layer.appendChild(span);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setEditableState(false);
+  buildWatermark();
+});
+
 function toggleStone(e, el) {
+  if (!editMode) return;
   e.stopPropagation();
   const row = el.closest('.teamrow');
   const match = el.closest('.match');
@@ -275,6 +334,7 @@ function propagateFrom(match) {
 }
 
 function toggleMatchResult(e, row) {
+  if (!editMode) return;
   // Stones and BO3 score fields have their own controls.
   if (e.target.closest('.stone, input')) return;
   const match = row.closest('.match');
