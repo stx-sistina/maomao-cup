@@ -1,0 +1,124 @@
+/* Styling for the bracket page. Loaded by index.html in all three modes (public
+   view, public edit, admin) -- there is no second copy of any of this anywhere. */
+
+:root{
+  --ink:#1b2630; --muted:#6f7882; --line:#aeb7c1; --paper:#f4f6f8; --card:#ffffff;
+  --upper:#e7f2fa; --lower:#fff2dc; --win:#eaf6ed; --win-line:#6f9f7b; --lose:#eef0f2;
+  --gold:#d7ad38; --gold-bg:#fff7d8; --silver:#a7adb4; --silver-bg:#eef0f2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,sans-serif}
+
+/* --- Toolbar (contents are built per mode by js/toolbar.js) --- */
+.toolbar{position:sticky;top:0;z-index:50;display:flex;gap:9px;align-items:center;padding:10px 16px;background:rgba(244,246,248,.97);border-bottom:1px solid #d6dce2}
+.toolbar button{font:700 13px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:7px;background:#fff;padding:7px 11px;cursor:pointer}
+.toolbar button.primary{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
+.toolbar .hint{margin-left:auto;color:var(--muted);font-size:13px}
+.toolbar .status{font-size:12px;font-weight:700;padding:3px 8px;border-radius:11px;border:1px solid #c8ced5;color:var(--muted);background:#fff}
+.toolbar .status.ok{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
+
+/* --- Bracket canvas --- */
+.wrap{overflow-x:auto;padding:20px}
+.canvas{position:relative;width:1800px;height:880px;margin:0 auto;background:#fff;border:1px solid #d9dee4;border-radius:14px;box-shadow:0 12px 32px rgba(27,38,48,.08);overflow:hidden}
+#bgCanvas{position:absolute;inset:0;width:1800px;height:880px;opacity:.2;z-index:0}
+.title{position:absolute;top:25px;left:0;width:100%;text-align:center;font-size:31px;font-weight:900}
+.subtitle{position:absolute;top:65px;left:0;width:100%;text-align:center;color:var(--muted);font-size:15px}
+.layer{position:absolute;top:108px;transform:translateX(-50%);font-size:12px;font-weight:900;letter-spacing:1.35px;color:#79838e}
+.paths{position:absolute;inset:0;z-index:1;pointer-events:none}
+.paths path{fill:none;stroke:var(--line);stroke-width:2;stroke-linecap:square;stroke-linejoin:miter}
+
+/* --- Candidate cards --- */
+.card{position:absolute;z-index:3;background:var(--card);border:1.5px solid #8e99a4;border-radius:9px;overflow:hidden}
+.candidate{width:220px;height:120px}
+.candidate.upper{box-shadow:inset 5px 0 0 #86b8d6}
+.candidate.lower{box-shadow:inset 5px 0 0 #dfac52}
+.candidate.right.upper{box-shadow:inset -5px 0 0 #86b8d6}
+.candidate.right.lower{box-shadow:inset -5px 0 0 #dfac52}
+.seedtag{position:absolute;top:4px;left:10px;z-index:4;font-size:11px;font-weight:900;letter-spacing:.9px;color:#6b7580;text-transform:uppercase}
+.player{height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 11px 5px 15px}
+.player+.player{border-top:1px solid #dde2e7;padding-top:6px}
+.name{font-size:15px;font-weight:900;line-height:1.1;min-width:0}
+.rank{flex:0 0 auto;font-size:12px;color:#59636d;background:#eef1f4;border-radius:12px;padding:3px 7px;white-space:nowrap}
+.candidate.upper:before,.candidate.lower:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.24}
+.candidate.upper:before{background:linear-gradient(90deg,var(--upper),transparent 43%)}
+.candidate.lower:before{background:linear-gradient(90deg,var(--lower),transparent 43%)}
+.candidate.right.upper:before{background:linear-gradient(270deg,var(--upper),transparent 43%)}
+.candidate.right.lower:before{background:linear-gradient(270deg,var(--lower),transparent 43%)}
+
+/* --- Match cards --- */
+.match{width:220px;height:112px}
+.match.final{width:260px;height:134px;border-width:2px;border-color:#657789;box-shadow:0 6px 17px rgba(37,52,65,.11)}
+.teamrow{position:relative;height:56px;display:flex;align-items:center;padding:8px 35px 8px 13px;transition:.15s ease;cursor:pointer}
+.final .teamrow{height:67px;padding-right:99px}
+.teamrow+.teamrow{border-top:1px solid #d9dee4}
+.teamrow.winner{background:var(--win);box-shadow:inset 4px 0 0 var(--win-line)}
+.final .teamrow.winner{background:var(--gold-bg);box-shadow:inset 5px 0 0 var(--gold);color:var(--ink);opacity:1}
+.final .teamrow.loser{background:var(--silver-bg);box-shadow:inset 5px 0 0 var(--silver);color:#7e8790;opacity:.62}
+.final .teamrow.leading{background:var(--win);box-shadow:inset 5px 0 0 var(--win-line);color:var(--ink);opacity:1}
+.teamrow.winner .teamtext{font-weight:900}
+.teamrow.loser{background:#f3f4f5;color:#7e8790;opacity:.62}
+.teamtext{font-size:14px;font-weight:700;line-height:1.15;min-width:0}
+.stone{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:1px dashed #9aa4ae;background:transparent;cursor:pointer;box-shadow:none}
+.stone.black{background:radial-gradient(circle at 35% 30%,#535960 0%,#15191d 62%,#06080a 100%);border:1px solid #111;box-shadow:inset -2px -2px 3px rgba(0,0,0,.18),0 1px 2px rgba(0,0,0,.14)}
+.stone.white{background:radial-gradient(circle at 35% 30%,#fff 0%,#f5f5f3 65%,#d7d9db 100%);border:1px solid #6f7882;box-shadow:inset -2px -2px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.10)}
+.score{position:absolute;right:61px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid #9aa4ae;border-radius:6px;background:#fff;color:var(--ink);font:900 16px "Lato",Arial,sans-serif}
+.finalstones{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:2px}
+.finalstones .stone{position:static;transform:none;width:12px;height:12px}
+
+/* --- Footer --- */
+.footer{position:absolute;left:26px;right:26px;bottom:16px;display:flex;align-items:flex-end;gap:18px;color:#69737d;font-size:13px}
+.legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.swatch{width:18px;height:12px;border:1px solid #aeb7c0;border-radius:3px}
+.swatch.upper{background:var(--upper)}
+.swatch.lower{background:var(--lower)}
+.swatch.win{background:var(--win);border-color:var(--win-line)}
+.note{margin-left:auto;max-width:760px;text-align:right;line-height:1.35;font-size:15px;color:var(--muted)}
+
+/* --- Editing affordances --- */
+[contenteditable=true]{outline:none}
+[contenteditable=true]:focus{background:#fff7c9!important;box-shadow:inset 0 0 0 2px #e7c34e;border-radius:3px}
+body:not(.editing) .teamrow,body:not(.editing) .stone,body:not(.editing) .score{cursor:default}
+/* A shared screenshot of a locally-edited bracket shouldn't carry an official timestamp. */
+body.edit-mode .subtitle{display:none}
+
+/* --- Archive button under each match --- */
+.archive-link{position:absolute;z-index:5;text-align:center}
+.archive-link button{font:700 11px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:12px;background:#fff;padding:3px 12px;cursor:pointer;color:#4a5560}
+.archive-link button:hover{background:#eef1f4}
+.archive-link button.filled{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
+.archive-link button.filled:hover{background:#dcefe1}
+
+/* --- Modal shared by the archive viewer and the admin archive editor --- */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,26,32,.55);z-index:100;display:flex;align-items:center;justify-content:center}
+.modal-box{position:relative;background:#fff;border-radius:12px;padding:26px 28px;width:420px;max-width:90vw;max-height:85vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-close{position:absolute;top:8px;right:12px;border:none;background:none;font-size:22px;line-height:1;cursor:pointer;color:var(--muted)}
+.modal-box h3{margin:0 0 14px;font-size:16px}
+.modal-actions{display:flex;gap:8px;margin-top:18px;justify-content:flex-end}
+.modal-actions button{font:700 13px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:7px;background:#fff;padding:7px 14px;cursor:pointer}
+.modal-actions button.primary{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
+.modal-actions button.danger{border-color:#c98a8a;color:#8a3a3a}
+.archive-tabs{display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid #d9dee4;margin-bottom:18px}
+.archive-tabs button{font:700 11px "Lato",Arial,sans-serif;text-transform:uppercase;letter-spacing:.6px;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;padding:0 0 9px;cursor:pointer;color:#8a939c}
+.archive-tabs button:hover{color:#4a5560}
+.archive-tabs button.active{color:var(--ink);font-weight:900;border-bottom-color:#6f9f7b}
+
+/* Read-only viewer rows */
+.archive-field{margin-bottom:16px}
+.archive-label{font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.archive-value{font-size:14px;line-height:1.5;white-space:pre-line}
+.archive-value a{color:#2f6fa8;text-decoration:none;border-bottom:1px solid currentColor}
+
+/* Admin editor form */
+.archive-editor label{display:block;font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 4px}
+.archive-editor label:first-of-type{margin-top:0}
+.archive-editor textarea,.archive-editor input[type=text]{width:100%;border:1px solid #b6bec7;border-radius:6px;padding:6px 8px;font:14px "Lato",Arial,sans-serif;resize:vertical}
+.archive-editor textarea{min-height:56px}
+.archive-editor .current{font-size:12px;color:var(--muted);margin-top:4px}
+
+@media print{
+  body{background:#fff}
+  .toolbar{display:none}
+  .wrap{padding:0;overflow:visible}
+  .canvas{border:none;box-shadow:none}
+}

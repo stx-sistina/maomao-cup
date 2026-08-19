@@ -6,3 +6,12 @@ Thumbs.db
 node_modules/
 package.json
 package-lock.json
+
+# Superseded local-only files kept around until they're confirmed unneeded
+.attic/
+
+# Source artwork for assets/bg.png: ~9 MB, and only the derived PNG is ever loaded
+assets/IMG_4817.JPG
+
+# Python bytecode from the steg/ tooling
+__pycache__/
