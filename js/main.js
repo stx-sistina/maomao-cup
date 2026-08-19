@@ -4,9 +4,15 @@
 //   view   default. Read-only, archive buttons open the read-only viewer.
 //   edit   public 编辑模式. Anyone may try out results locally; nothing is saved, and
 //          the background gets watermarked so an edited screenshot is identifiable.
-//   admin  ?admin in the URL. Adds the archive editor, a local draft, and writing
-//          data.json straight to disk. Not a security boundary -- a static site cannot
-//          have one -- just a separate set of controls.
+//   admin  ?admin in the URL, behind a passphrase. Adds the archive editor, a local
+//          draft, and writing data.json straight to disk.
+//
+// The passphrase is emphatically not a security boundary: the check below runs in the
+// visitor's own browser, in code they already have, so anyone willing to open the
+// developer console can import js/admin.js directly and skip it. It exists to stop
+// somebody stumbling into the editor by guessing at the URL. What actually protects
+// the published bracket is push access to the repository, which lives on GitHub and
+// has nothing to do with this file.
 
 import { normalize } from './model.js';
 import { render } from './render.js';
@@ -16,9 +22,15 @@ import { loadBackground, stampEdited } from './watermark.js';
 
 const isAdmin = new URLSearchParams(location.search).has('admin');
 
+// SHA-256 of the admin passphrase. Storing the digest rather than the passphrase only
+// keeps it from being read straight off the page; it is not resistant to a guessing
+// attack, since the digest is public and unsalted.
+const ADMIN_HASH = '5b265ae76c8f59b017deb523ab708f5bf32ac69016f8b2a35b85f8d4c23ee272';
+const UNLOCK_KEY = 'rengoAdminUnlocked';
+
 const app = {
   data: null,
-  mode: isAdmin ? 'admin' : 'view',
+  mode: 'view',
 
   // Re-render from the data, then let the active mode persist it if it wants to.
   changed() {
@@ -61,6 +73,45 @@ function enterEditMode() {
   stampEdited(document.getElementById('bgCanvas'));
 }
 
+async function sha256Hex(text) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(digest))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Remembered for the tab's lifetime, so a refresh mid-editing does not re-prompt. The
+// stored value is the expected digest, so changing the passphrase invalidates it.
+async function unlockAdmin() {
+  try {
+    if (sessionStorage.getItem(UNLOCK_KEY) === ADMIN_HASH) return true;
+  } catch (err) { /* private browsing can refuse sessionStorage */ }
+
+  // crypto.subtle only exists in a secure context, i.e. https or localhost.
+  if (!window.crypto || !crypto.subtle) {
+    alert('无法校验口令：本页需通过 https 或 http://localhost 打开。');
+    return false;
+  }
+  const input = prompt('请输入管理口令：');
+  if (input === null) return false;
+  if (await sha256Hex(input) !== ADMIN_HASH) {
+    alert('口令不正确。');
+    return false;
+  }
+  try { sessionStorage.setItem(UNLOCK_KEY, ADMIN_HASH); } catch (err) { /* fine */ }
+  return true;
+}
+
+async function enterAdminMode() {
+  if (!await unlockAdmin()) return;   // stays in the read-only public view
+  app.mode = 'admin';
+  document.body.classList.add('editing');
+  const admin = await import('./admin.js');
+  const draft = admin.loadDraft();
+  if (draft) app.data = draft;
+  render(app);
+  admin.initAdmin(app);
+}
+
 function showLoadError(err) {
   document.getElementById('bracket').innerHTML =
     `<div style="padding:40px;line-height:1.7">
@@ -84,21 +135,15 @@ async function boot() {
   }
   app.data = normalize(raw);
 
-  if (isAdmin) {
-    document.body.classList.add('editing');
-    const admin = await import('./admin.js');
-    const draft = admin.loadDraft();
-    if (draft) app.data = draft;
-    render(app);
-    admin.initAdmin(app);
-  } else {
-    buildPublicToolbar();
-    render(app);
-  }
-
+  // Render the public view first so the page looks finished behind the passphrase
+  // dialog, and so a failed unlock simply leaves the visitor on the normal page.
+  buildPublicToolbar();
+  render(app);
   installInteractions(app);
   installArchiveButtons(app);
   loadBackground(document.getElementById('bgCanvas'));
+
+  if (isAdmin) await enterAdminMode();
 }
 
 boot();

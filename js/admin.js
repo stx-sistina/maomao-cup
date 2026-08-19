@@ -203,7 +203,9 @@ function buildToolbar() {
 <span class="hint">编辑内容会自动存为本地草稿 · 「保存到 data.json」才会真正发布 ·
 连接项目目录后可直接写盘（需通过 http://localhost 打开）· 点击队伍记一胜，再点可撤销/反转 ·
 棋色联动切换：未定 → 黑/白 → 白/黑</span>`;
-  bar.addEventListener('click', e => {
+  // Assignment rather than addEventListener: this replaces the public toolbar's
+  // handler outright, instead of leaving both attached to the same element.
+  bar.onclick = e => {
     const act = e.target.closest('button')?.dataset.act;
     if (act === 'publish') publish();
     else if (act === 'connect') connectRepoDir();
@@ -211,7 +213,7 @@ function buildToolbar() {
     else if (act === 'print') window.print();
     else if (act === 'clear') app.clearResults();
     else if (act === 'discard') discardDraft();
-  });
+  };
   updateStatus();
 }
 

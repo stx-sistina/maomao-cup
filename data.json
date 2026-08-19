@@ -1,37 +1,142 @@
 {
-  "title": "第一届猫猫杯\u00a0 淘汰赛对阵表",
-  "updated": "2026/8/19 22:33",
+  "title": "第一届猫猫杯  淘汰赛对阵表",
+  "updated": "2026/8/19 23:53",
   "note": [
     "所有比赛棋份均为猜先，对局用时为每方40分钟+3次40秒读秒",
     "最终解释权归猫猫所有"
   ],
-
   "candidates": [
-    { "qf": "qf1", "slot": 0, "seedtag": "A组 · 高种子",
-      "players": [{ "name": "流年似梦", "rank": "9段 [业6]" }, { "name": "Afrive", "rank": "7段" }] },
-    { "qf": "qf1", "slot": 1, "seedtag": "低种子 1 · D+B",
-      "players": [{ "name": "黑白入玄", "rank": "9段" }, { "name": "网友小熊", "rank": "6段" }] },
-    { "qf": "qf2", "slot": 0, "seedtag": "C组 · 高种子",
-      "players": [{ "name": "唐英w", "rank": "9段 [业6]" }, { "name": "烨千月", "rank": "3段" }] },
-    { "qf": "qf2", "slot": 1, "seedtag": "低种子 3 · E+B",
-      "players": [{ "name": "La Campanella", "rank": "9段" }, { "name": "小虎96543", "rank": "5段" }] },
-    { "qf": "qf3", "slot": 0, "seedtag": "B组 · 高种子",
-      "players": [{ "name": "水北天南", "rank": "9段 [业6]" }, { "name": "Yuyuko0x0", "rank": "7段" }] },
-    { "qf": "qf3", "slot": 1, "seedtag": "D组 · 高种子",
-      "players": [{ "name": "HLE2137", "rank": "8段" }, { "name": "今夕只为何夕", "rank": "5段" }] },
-    { "qf": "qf4", "slot": 0, "seedtag": "E组 · 高种子",
-      "players": [{ "name": "酒寄辉夜", "rank": "9段" }, { "name": "鸽子诗人", "rank": "6段" }] },
-    { "qf": "qf4", "slot": 1, "seedtag": "低种子 2 · C+A",
-      "players": [{ "name": "芦苇n", "rank": "9段 [业6]" }, { "name": "青火kdy", "rank": "7段" }] }
+    {
+      "qf": "qf1",
+      "slot": 0,
+      "seedtag": "A组 · 高种子",
+      "players": [
+        {
+          "name": "流年似梦",
+          "rank": "9段 [业6]"
+        },
+        {
+          "name": "Afrive",
+          "rank": "7段"
+        }
+      ]
+    },
+    {
+      "qf": "qf1",
+      "slot": 1,
+      "seedtag": "低种子 1 · D+B",
+      "players": [
+        {
+          "name": "黑白入玄",
+          "rank": "9段"
+        },
+        {
+          "name": "网友小熊",
+          "rank": "6段"
+        }
+      ]
+    },
+    {
+      "qf": "qf2",
+      "slot": 0,
+      "seedtag": "C组 · 高种子",
+      "players": [
+        {
+          "name": "唐英w",
+          "rank": "9段 [业6]"
+        },
+        {
+          "name": "烨千月",
+          "rank": "3段"
+        }
+      ]
+    },
+    {
+      "qf": "qf2",
+      "slot": 1,
+      "seedtag": "低种子 3 · E+B",
+      "players": [
+        {
+          "name": "La Campanella",
+          "rank": "9段"
+        },
+        {
+          "name": "小虎96543",
+          "rank": "5段"
+        }
+      ]
+    },
+    {
+      "qf": "qf3",
+      "slot": 0,
+      "seedtag": "B组 · 高种子",
+      "players": [
+        {
+          "name": "水北天南",
+          "rank": "9段 [业6]"
+        },
+        {
+          "name": "Yuyuko0x0",
+          "rank": "7段"
+        }
+      ]
+    },
+    {
+      "qf": "qf3",
+      "slot": 1,
+      "seedtag": "D组 · 高种子",
+      "players": [
+        {
+          "name": "HLE2137",
+          "rank": "8段"
+        },
+        {
+          "name": "今夕只为何夕",
+          "rank": "5段"
+        }
+      ]
+    },
+    {
+      "qf": "qf4",
+      "slot": 0,
+      "seedtag": "E组 · 高种子",
+      "players": [
+        {
+          "name": "酒寄辉夜",
+          "rank": "9段"
+        },
+        {
+          "name": "鸽子诗人",
+          "rank": "6段"
+        }
+      ]
+    },
+    {
+      "qf": "qf4",
+      "slot": 1,
+      "seedtag": "低种子 2 · C+A",
+      "players": [
+        {
+          "name": "芦苇n",
+          "rank": "9段 [业6]"
+        },
+        {
+          "name": "青火kdy",
+          "rank": "7段"
+        }
+      ]
+    }
   ],
-
   "matches": {
     "qf1": {
       "bestOf": 1,
       "games": [
         {
           "winner": 0,
-          "stones": ["white", "black"],
+          "stones": [
+            "white",
+            "black"
+          ],
           "archive": {
             "black": "黑白入玄 [9段]\n网友小熊 [6段]",
             "white": "流年似梦 [9段, 业6]\nAfrive [7段]",
@@ -47,38 +152,81 @@
       "bestOf": 1,
       "games": [
         {
-          "winner": null,
-          "stones": ["white", "black"],
+          "winner": 1,
+          "stones": [
+            "white",
+            "black"
+          ],
           "archive": {
             "black": "La Campanella [9段]\n小虎96543 [5段]",
             "white": "唐英w [9段, 业6]\n烨千月 [3段]",
-            "link": "https://online-go.com/game/89893092"
+            "result": "黑时间胜",
+            "link": "https://online-go.com/game/89893092",
+            "sgf": "archive/sgf/qf2.sgf",
+            "report": "archive/report/qf2.pdf"
           }
         }
       ]
     },
     "sf1": {
       "bestOf": 1,
-      "games": [{ "winner": null, "stones": [null, null] }]
+      "games": [
+        {
+          "winner": null,
+          "stones": [
+            null,
+            null
+          ]
+        }
+      ]
     },
     "final": {
       "bestOf": 3,
       "games": [
-        { "winner": null, "stones": [null, null] },
-        { "winner": null, "stones": [null, null] },
-        { "winner": null, "stones": [null, null] }
+        {
+          "winner": null,
+          "stones": [
+            null,
+            null
+          ]
+        },
+        {
+          "winner": null,
+          "stones": [
+            null,
+            null
+          ]
+        },
+        {
+          "winner": null,
+          "stones": [
+            null,
+            null
+          ]
+        }
       ]
     },
     "sf2": {
       "bestOf": 1,
-      "games": [{ "winner": null, "stones": [null, null] }]
+      "games": [
+        {
+          "winner": null,
+          "stones": [
+            null,
+            null
+          ]
+        }
+      ]
     },
     "qf3": {
       "bestOf": 1,
       "games": [
         {
           "winner": 1,
-          "stones": ["black", "white"],
+          "stones": [
+            "black",
+            "white"
+          ],
           "archive": {
             "black": "水北天南 [9段, 业6]\nYuyuko0x0 [7段]",
             "white": "HLE2137 [8段]\n今夕只为何夕 [5段]",
@@ -95,7 +243,10 @@
       "games": [
         {
           "winner": null,
-          "stones": ["white", "black"],
+          "stones": [
+            "white",
+            "black"
+          ],
           "archive": {
             "black": "芦苇n [9段, 业6]\n青火kdy [7段]",
             "white": "酒寄辉夜 [9段]\n鸽子诗人 [6段]",

@@ -64,10 +64,15 @@ of agreement with itself:
 | --- | --- | --- |
 | View | `/` | Read-only. Archive buttons appear only where there is something to show. |
 | Edit | `/` then 编辑模式 | Anyone can try out results locally. Nothing is saved; a refresh restores the official view. |
-| Admin | `/?admin` | Adds the archive editor, local drafts, and writing to disk. |
+| Admin | `/?admin` | Asks for a passphrase, then adds the archive editor, local drafts, and writing to disk. |
 
 Admin mode is a convenience, not a security boundary — a static site cannot have one,
-since all of its code is public by definition.
+since all of its code is public by definition. The passphrase is checked by comparing
+SHA-256 of the input against a digest stored in `js/main.js`, which keeps a passer-by
+from wandering into the editor and nothing more: the check runs in the visitor's own
+browser, and the digest is public and unsalted. What actually protects the published
+bracket is push access to this repository. A successful unlock is remembered in
+`sessionStorage` for the tab, so a refresh mid-edit does not re-prompt.
 
 ## The watermark side quest
 
