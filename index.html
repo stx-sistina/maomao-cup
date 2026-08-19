@@ -92,7 +92,6 @@ body:not(.edit-mode) .teamrow,body:not(.edit-mode) .stone,body:not(.edit-mode) .
 <div class="toolbar-edit">
 <button onclick="exitEditMode()">回到官方结果</button>
 <button onclick="window.print()">打印 / 导出 PDF</button>
-<button onclick="downloadEdited()">保存编辑后的 HTML</button>
 <button onclick="clearResults()">清空赛果</button>
 <span class="hint">可直接编辑选手名与段位 · 点击队伍设置/取消胜者，点击对手可反转 · 晋级队伍自动填入下一轮 · 棋色联动切换：未定 → 黑/白 → 白/黑</span>
 </div>
@@ -100,7 +99,7 @@ body:not(.edit-mode) .teamrow,body:not(.edit-mode) .stone,body:not(.edit-mode) .
 <div class="wrap">
 <div class="canvas" id="bracket"><canvas id="bgCanvas" width="1800" height="880" aria-hidden="true"></canvas>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
-<div class="subtitle" contenteditable="true">更新时间：2026/8/19 01:45</div>
+<div class="subtitle" contenteditable="true">更新时间：2026/8/19 08:55</div>
 <div class="layer" style="left:130px">参赛队伍</div>
 <div class="layer" style="left:380px">四分之一决赛</div>
 <div class="layer" style="left:630px">半决赛</div>
@@ -730,17 +729,6 @@ function clearResults() {
   });
 }
 
-function downloadEdited() {
-  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  const blob = new Blob([html], {type:'text/html'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'rengo_knockout_bracket_edited.html';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-}
 </script>
 
 
