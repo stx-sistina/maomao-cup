@@ -50,7 +50,7 @@ function buildPublicToolbar() {
 <button data-act="exit">回到官方结果</button>
 <button data-act="print">打印 / 导出 PDF</button>
 <button data-act="clear">清空赛果</button>
-<span class="hint">可直接编辑选手名与段位 · 点击队伍设置/取消胜者，点击对手可反转 ·
+<span class="hint">可直接编辑选手名与段位 · 点击队伍记一胜，胜负已分后点任意一方清零重来 ·
 晋级队伍自动填入下一轮 · 棋色联动切换：未定 → 黑/白 → 白/黑 ·
 本地改动不会影响官方页面，刷新即还原</span>`;
   } else {

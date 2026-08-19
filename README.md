@@ -18,8 +18,9 @@ mode for keeping results up to date.
 2. First time only, click **连接项目目录** and pick this folder. The permission is
    remembered, so later sessions go straight to editing.
 
-3. Click teams to record results, click the stones to set colours, use **编辑档案** to
-   record a game's players/result/link and attach an SGF or a report PDF.
+3. Click a team to award it a game; once a match is decided, clicking either team clears
+   it back to 0-0 so it can be entered again. Click the stones to set colours, and use
+   **编辑档案** to record a game's players/result/link and attach an SGF or a report PDF.
 
 4. Click **保存到 data.json**. That writes `data.json` (and any attached files into
    `archive/`) directly. Commit and push; Pages serves the new results.

@@ -57,23 +57,22 @@ function cycleStone(app, row, gameIndex) {
     : game.stones[slot] === 'black' ? 'white' : 'black';
 }
 
-// Clicking a team awards it the next game. Once the match is settled the click acts on
-// the deciding game instead of adding an impossible extra win: clicking the winner
-// takes that win back, clicking the loser hands the deciding game to it. For a
-// best-of-1 this reads exactly as before -- click to set, click again to clear, click
-// the opponent to reverse.
+// While the match is still open, clicking a team awards it the next game. Once one side
+// has reached the winning threshold, a click on either team clears the score back to
+// 0-0, so correcting a mistake means starting the match over rather than reaching for a
+// rule about which game a click should undo.
+//
+// Stone colours are left alone: they say who held black, which does not stop being true
+// because the score was mistyped.
 function recordWin(app, matchId, slot) {
   const match = app.data.matches[matchId];
-  const winner = matchWinner(match);
 
-  if (winner === null) {
+  if (matchWinner(match) === null) {
     const next = match.games.find(g => g.winner === null);
     if (!next) return;
     next.winner = slot;
   } else {
-    const decided = match.games.filter(g => g.winner !== null);
-    const deciding = decided[decided.length - 1];
-    deciding.winner = winner === slot ? null : slot;
+    match.games.forEach(g => { g.winner = null; });
   }
   clearDownstream(app.data, matchId);
 }
