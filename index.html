@@ -15,7 +15,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 .toolbar .hint{margin-left:auto;color:var(--muted);font-size:13px}
 .wrap{overflow-x:auto;padding:20px}
 .canvas{position:relative;width:1800px;height:880px;margin:0 auto;background:#fff;border:1px solid #d9dee4;border-radius:14px;box-shadow:0 12px 32px rgba(27,38,48,.08);overflow:hidden}
-.canvas::before{content:'';position:absolute;inset:0;background:url('bg.png') top left/1800px 880px no-repeat;opacity:.2;z-index:0}
+#bgCanvas{position:absolute;inset:0;width:1800px;height:880px;opacity:.2;z-index:0}
 .title{position:absolute;top:25px;left:0;width:100%;text-align:center;font-size:31px;font-weight:900}
 .subtitle{position:absolute;top:65px;left:0;width:100%;text-align:center;color:var(--muted);font-size:15px}
 .layer{position:absolute;top:108px;transform:translateX(-50%);font-size:12px;font-weight:900;letter-spacing:1.35px;color:#79838e}
@@ -67,9 +67,6 @@ body.edit-mode .toolbar-view{display:none}
 body.edit-mode .toolbar-edit{display:flex}
 body.edit-mode .subtitle{display:none}
 body:not(.edit-mode) .teamrow,body:not(.edit-mode) .stone,body:not(.edit-mode) .score{cursor:default}
-.watermark-layer{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;display:none}
-body.edit-mode .watermark-layer{display:block}
-.watermark-text{position:absolute;font-size:26px;font-weight:900;color:rgba(27,38,48,.07);white-space:nowrap;transform:rotate(-28deg);font-family:"Lato",Arial,sans-serif;letter-spacing:2px}
 .archive-link{position:absolute;z-index:5;text-align:center}
 .archive-link button{font:700 11px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:12px;background:#fff;padding:3px 12px;cursor:pointer;color:#4a5560}
 .archive-link button:hover{background:#eef1f4}
@@ -101,7 +98,7 @@ body.edit-mode .watermark-layer{display:block}
 </div>
 </div>
 <div class="wrap">
-<div class="canvas" id="bracket"><div class="watermark-layer" id="watermarkLayer" aria-hidden="true"></div>
+<div class="canvas" id="bracket"><canvas id="bgCanvas" width="1800" height="880" aria-hidden="true"></canvas>
 <div class="title" contenteditable="true">第一届猫猫杯&nbsp; 淘汰赛对阵表</div>
 <div class="subtitle" contenteditable="true">更新时间：2026/8/19 01:45</div>
 <div class="layer" style="left:130px">参赛队伍</div>
@@ -249,6 +246,7 @@ function enterEditMode() {
   editMode = true;
   document.body.classList.add('edit-mode');
   setEditableState(true);
+  markCanvasEdited();
 }
 
 function exitEditMode() {
@@ -256,26 +254,191 @@ function exitEditMode() {
   location.reload();
 }
 
-function buildWatermark() {
-  const layer = document.getElementById('watermarkLayer');
-  if (!layer) return;
-  const spacingX = 260, spacingY = 200;
-  for (let y = -100; y < 980; y += spacingY) {
-    for (let x = -140; x < 1900; x += spacingX) {
-      const span = document.createElement('span');
-      span.className = 'watermark-text';
-      span.textContent = '自由编辑';
-      span.style.left = x + 'px';
-      span.style.top = y + 'px';
-      layer.appendChild(span);
+// --- Background canvas + blind steganographic "edited" marker ---
+// The background is drawn onto a <canvas> (rather than a plain CSS image) so that
+// entering edit mode can invisibly stamp the pixel data with a DCT-domain watermark.
+// Because this is a public, unauthenticated feature (anyone can open edit mode, or
+// just edit the DOM directly via devtools without ever touching this code), the goal
+// here is only to catch casual sharing of customized screenshots, not to defeat a
+// determined adversary.
+const WM_CANVAS_W = 1800, WM_CANVAS_H = 880;
+const WM_GRID = 5, WM_TILE_W = WM_CANVAS_W / WM_GRID, WM_TILE_H = WM_CANVAS_H / WM_GRID; // 360x176
+const WM_BLOCK = 8;
+const WM_BLOCKS_X = WM_TILE_W / WM_BLOCK, WM_BLOCKS_Y = WM_TILE_H / WM_BLOCK; // 45x22
+const WM_BLOCKS_PER_TILE = WM_BLOCKS_X * WM_BLOCKS_Y; // 990
+const WM_HEADER_BITS = 48;
+const WM_MAX_PAYLOAD_BYTES = 12;
+const WM_REDUNDANCY = Math.floor(WM_BLOCKS_PER_TILE / (WM_HEADER_BITS + WM_MAX_PAYLOAD_BYTES * 8));
+const WM_POS_A = [4, 1], WM_POS_B = [3, 2];
+const WM_MARGIN = 8.0;
+const WM_KEY = 'edited-watermark-key';
+const WM_MESSAGE = 'edited';
+
+function wmXmur3(str) {
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = h << 13 | h >>> 19;
+  }
+  return function() {
+    h = Math.imul(h ^ h >>> 16, 2246822507);
+    h = Math.imul(h ^ h >>> 13, 3266489909);
+    return (h ^= h >>> 16) >>> 0;
+  };
+}
+function wmMulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function wmBlockOrder(key) {
+  const rng = wmMulberry32(wmXmur3(key)());
+  const arr = Array.from({ length: WM_BLOCKS_PER_TILE }, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function wmDctMatrix(n) {
+  const m = [];
+  for (let k = 0; k < n; k++) {
+    const alpha = k === 0 ? Math.sqrt(1 / n) : Math.sqrt(2 / n);
+    const row = [];
+    for (let x = 0; x < n; x++) row.push(alpha * Math.cos(Math.PI / n * (x + 0.5) * k));
+    m.push(row);
+  }
+  return m;
+}
+const WM_C = wmDctMatrix(WM_BLOCK);
+function wmMatMul(a, b) {
+  const n = a.length, out = [];
+  for (let i = 0; i < n; i++) {
+    const row = new Array(n).fill(0);
+    for (let k = 0; k < n; k++) {
+      const aik = a[i][k];
+      for (let j = 0; j < n; j++) row[j] += aik * b[k][j];
+    }
+    out.push(row);
+  }
+  return out;
+}
+function wmTranspose(m) {
+  return m[0].map((_, j) => m.map(row => row[j]));
+}
+const WM_CT = wmTranspose(WM_C);
+function wmDct2(block) { return wmMatMul(wmMatMul(WM_C, block), WM_CT); }
+function wmIdct2(coeffs) { return wmMatMul(wmMatMul(WM_CT, coeffs), WM_C); }
+
+function wmBitsFromBytes(bytes) {
+  const bits = [];
+  for (const byte of bytes) for (let i = 7; i >= 0; i--) bits.push((byte >> i) & 1);
+  return bits;
+}
+function wmCrc32(bytes) {
+  let crc = 0xFFFFFFFF;
+  for (const byte of bytes) {
+    crc ^= byte;
+    for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (0xEDB88320 & -(crc & 1));
+  }
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+function wmBuildPayloadBits(message) {
+  const msgBytes = Array.from(new TextEncoder().encode(message));
+  const crc = wmCrc32(msgBytes);
+  const header = [(msgBytes.length >> 8) & 0xFF, msgBytes.length & 0xFF,
+    (crc >>> 24) & 0xFF, (crc >>> 16) & 0xFF, (crc >>> 8) & 0xFF, crc & 0xFF];
+  return wmBitsFromBytes(header.concat(msgBytes));
+}
+function wmGetBlock(y, tileX0, tileY0, bx, by) {
+  const block = [];
+  for (let r = 0; r < WM_BLOCK; r++) {
+    const row = [];
+    for (let c = 0; c < WM_BLOCK; c++) row.push(y[(tileY0 + by * WM_BLOCK + r) * WM_CANVAS_W + (tileX0 + bx * WM_BLOCK + c)]);
+    block.push(row);
+  }
+  return block;
+}
+function wmSetBlock(y, tileX0, tileY0, bx, by, block) {
+  for (let r = 0; r < WM_BLOCK; r++)
+    for (let c = 0; c < WM_BLOCK; c++)
+      y[(tileY0 + by * WM_BLOCK + r) * WM_CANVAS_W + (tileX0 + bx * WM_BLOCK + c)] = block[r][c];
+}
+function wmEmbedBitInBlock(block, bit) {
+  const d = wmDct2(block);
+  const diff = d[WM_POS_A[0]][WM_POS_A[1]] - d[WM_POS_B[0]][WM_POS_B[1]];
+  const target = bit === 1 ? WM_MARGIN : -WM_MARGIN;
+  if ((bit === 1 && diff < WM_MARGIN) || (bit === 0 && diff > -WM_MARGIN)) {
+    const delta = (target - diff) / 2;
+    d[WM_POS_A[0]][WM_POS_A[1]] += delta;
+    d[WM_POS_B[0]][WM_POS_B[1]] -= delta;
+  }
+  const spatial = wmIdct2(d);
+  for (let r = 0; r < WM_BLOCK; r++)
+    for (let c = 0; c < WM_BLOCK; c++)
+      spatial[r][c] = Math.min(255, Math.max(0, Math.round(spatial[r][c])));
+  return spatial;
+}
+
+// Embeds the constant "edited" marker redundantly into all 5x5 tiles of the
+// canvas's Y (luma) channel. See src/dct_watermark.py for the offline Python
+// twin of this algorithm and the full rationale.
+function markCanvasEdited() {
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas || !canvas.dataset.loaded) return;
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, WM_CANVAS_W, WM_CANVAS_H);
+  const px = imgData.data;
+  const y = new Float64Array(WM_CANVAS_W * WM_CANVAS_H);
+  for (let i = 0; i < WM_CANVAS_W * WM_CANVAS_H; i++) {
+    const r = px[i * 4], g = px[i * 4 + 1], b = px[i * 4 + 2];
+    y[i] = 0.299 * r + 0.587 * g + 0.114 * b;
+  }
+  const payloadBits = wmBuildPayloadBits(WM_MESSAGE);
+  const order = wmBlockOrder(WM_KEY);
+  for (let row = 0; row < WM_GRID; row++) {
+    for (let col = 0; col < WM_GRID; col++) {
+      const tileX0 = col * WM_TILE_W, tileY0 = row * WM_TILE_H;
+      let slot = 0;
+      for (const bit of payloadBits) {
+        for (let k = 0; k < WM_REDUNDANCY; k++) {
+          const blkIdx = order[slot++];
+          const bx = blkIdx % WM_BLOCKS_X, by = Math.floor(blkIdx / WM_BLOCKS_X);
+          const block = wmGetBlock(y, tileX0, tileY0, bx, by);
+          wmSetBlock(y, tileX0, tileY0, bx, by, wmEmbedBitInBlock(block, bit));
+        }
+      }
     }
   }
+  for (let i = 0; i < WM_CANVAS_W * WM_CANVAS_H; i++) {
+    const oldY = 0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2];
+    const delta = y[i] - oldY;
+    px[i * 4] = Math.min(255, Math.max(0, px[i * 4] + delta));
+    px[i * 4 + 1] = Math.min(255, Math.max(0, px[i * 4 + 1] + delta));
+    px[i * 4 + 2] = Math.min(255, Math.max(0, px[i * 4 + 2] + delta));
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function loadBackgroundCanvas() {
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, WM_CANVAS_W, WM_CANVAS_H);
+    canvas.dataset.loaded = '1';
+  };
+  img.src = 'bg.png';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   setEditableState(false);
-  buildWatermark();
   initArchiveButtons();
+  loadBackgroundCanvas();
 });
 
 // --- Per-game archive (read-only viewer; data lives in each .match's data-archive attribute) ---
