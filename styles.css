@@ -7,11 +7,11 @@
   --gold:#d7ad38; --gold-bg:#fff7d8; --silver:#a7adb4; --silver-bg:#eef0f2;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,sans-serif}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 
 /* --- Toolbar (contents are built per mode by js/toolbar.js) --- */
 .toolbar{position:sticky;top:0;z-index:50;display:flex;gap:9px;align-items:center;padding:10px 16px;background:rgba(244,246,248,.97);border-bottom:1px solid #d6dce2}
-.toolbar button{font:700 13px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:7px;background:#fff;padding:7px 11px;cursor:pointer}
+.toolbar button{font:700 13px "Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;border:1px solid #b6bec7;border-radius:7px;background:#fff;padding:7px 11px;cursor:pointer}
 .toolbar button.primary{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
 .toolbar .hint{margin-left:auto;color:var(--muted);font-size:13px}
 .toolbar .status{font-size:12px;font-weight:700;padding:3px 8px;border-radius:11px;border:1px solid #c8ced5;color:var(--muted);background:#fff}
@@ -61,7 +61,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",Arial,
 .stone{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:1px dashed #9aa4ae;background:transparent;cursor:pointer;box-shadow:none}
 .stone.black{background:radial-gradient(circle at 35% 30%,#535960 0%,#15191d 62%,#06080a 100%);border:1px solid #111;box-shadow:inset -2px -2px 3px rgba(0,0,0,.18),0 1px 2px rgba(0,0,0,.14)}
 .stone.white{background:radial-gradient(circle at 35% 30%,#fff 0%,#f5f5f3 65%,#d7d9db 100%);border:1px solid #6f7882;box-shadow:inset -2px -2px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.10)}
-.score{position:absolute;right:61px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid #9aa4ae;border-radius:6px;background:#fff;color:var(--ink);font:900 16px "Lato",Arial,sans-serif}
+.score{position:absolute;right:61px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid #9aa4ae;border-radius:6px;background:#fff;color:var(--ink);font:900 16px "Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 .finalstones{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:2px}
 .finalstones .stone{position:static;transform:none;width:12px;height:12px}
 
@@ -84,7 +84,7 @@ body.edit-mode .subtitle{display:none}
 
 /* --- Archive button under each match --- */
 .archive-link{position:absolute;z-index:5;text-align:center}
-.archive-link button{font:700 11px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:12px;background:#fff;padding:3px 12px;cursor:pointer;color:#4a5560}
+.archive-link button{font:700 11px "Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;border:1px solid #b6bec7;border-radius:12px;background:#fff;padding:3px 12px;cursor:pointer;color:#4a5560}
 .archive-link button:hover{background:#eef1f4}
 .archive-link button.filled{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
 .archive-link button.filled:hover{background:#dcefe1}
@@ -95,11 +95,11 @@ body.edit-mode .subtitle{display:none}
 .modal-close{position:absolute;top:8px;right:12px;border:none;background:none;font-size:22px;line-height:1;cursor:pointer;color:var(--muted)}
 .modal-box h3{margin:0 0 14px;font-size:16px}
 .modal-actions{display:flex;gap:8px;margin-top:18px;justify-content:flex-end}
-.modal-actions button{font:700 13px "Lato",Arial,sans-serif;border:1px solid #b6bec7;border-radius:7px;background:#fff;padding:7px 14px;cursor:pointer}
+.modal-actions button{font:700 13px "Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;border:1px solid #b6bec7;border-radius:7px;background:#fff;padding:7px 14px;cursor:pointer}
 .modal-actions button.primary{border-color:#6f9f7b;background:var(--win);color:#2f4a37}
 .modal-actions button.danger{border-color:#c98a8a;color:#8a3a3a}
 .archive-tabs{display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid #d9dee4;margin-bottom:18px}
-.archive-tabs button{font:700 11px "Lato",Arial,sans-serif;text-transform:uppercase;letter-spacing:.6px;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;padding:0 0 9px;cursor:pointer;color:#8a939c}
+.archive-tabs button{font:700 11px "Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-transform:uppercase;letter-spacing:.6px;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;padding:0 0 9px;cursor:pointer;color:#8a939c}
 .archive-tabs button:hover{color:#4a5560}
 .archive-tabs button.active{color:var(--ink);font-weight:900;border-bottom-color:#6f9f7b}
 
@@ -112,7 +112,7 @@ body.edit-mode .subtitle{display:none}
 /* Admin editor form */
 .archive-editor label{display:block;font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 4px}
 .archive-editor label:first-of-type{margin-top:0}
-.archive-editor textarea,.archive-editor input[type=text]{width:100%;border:1px solid #b6bec7;border-radius:6px;padding:6px 8px;font:14px "Lato",Arial,sans-serif;resize:vertical}
+.archive-editor textarea,.archive-editor input[type=text]{width:100%;border:1px solid #b6bec7;border-radius:6px;padding:6px 8px;font:14px "Lato",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;resize:vertical}
 .archive-editor textarea{min-height:56px}
 .archive-editor .current{font-size:12px;color:var(--muted);margin-top:4px}
 
