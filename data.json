@@ -1,6 +1,6 @@
 {
   "title": "第一届猫猫杯  淘汰赛对阵表",
-  "updated": "2026/8/22 22:30",
+  "updated": "2026/8/22 23:03",
   "note": [
     "所有比赛均采用中国规则，黑贴7.5目，棋份为猜先，对局用时为每方40分钟+3次40秒读秒",
     "最终解释权归猫猫所有"
@@ -172,7 +172,7 @@
       "bestOf": 1,
       "games": [
         {
-          "winner": null,
+          "winner": 1,
           "stones": [
             "black",
             "white"
@@ -180,7 +180,10 @@
           "archive": {
             "black": "流年似梦 [9段, 业6]\nAfrive [7段]",
             "white": "La Campanella [9段]\n小虎96543 [5段]",
-            "link": "https://online-go.com/game/89989852"
+            "result": "白中盘胜",
+            "link": "https://online-go.com/game/89989852",
+            "sgf": "archive/sgf/sf1.sgf",
+            "report": "archive/report/sf1.pdf"
           }
         }
       ]
